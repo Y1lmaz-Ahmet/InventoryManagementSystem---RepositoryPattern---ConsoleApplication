@@ -14,6 +14,15 @@ namespace DomainLayer.Models
         private double _price;
         private int _stock;
 
+        public Product(int id, string name, string description, double price, int stock)
+        {
+            Id = id;
+            Name = name;
+            Description = description;
+            Price = price;
+            Stock = stock;
+        }
+
         public int Id
         {
             get { return _id; }
@@ -47,7 +56,7 @@ namespace DomainLayer.Models
                 {
                     throw new ArgumentException("Product description cannot be empty.");
                 }
-                if (value.Length <= 30)
+                if (value.Length <= 10)
                 {
                     throw new ArgumentException("Product description atleast needs 30 characters.");
                 }
@@ -77,6 +86,39 @@ namespace DomainLayer.Models
                 }
                 _stock = value;
             }
+        }
+
+        public void UpdateProduct(Product updatedProduct)
+        {
+            if (updatedProduct == null)
+            {
+                throw new ArgumentNullException(nameof(updatedProduct), "Updated product cannot be null.");
+            }
+
+            // Controleer of de ID's overeenkomen
+            if (this.Id != updatedProduct.Id)
+            {
+                throw new ArgumentException("Cannot update product with different ID.");
+            }
+
+            // Werk de eigenschappen van het product bij met de gegevens van het bijgewerkte product
+            this.Name = updatedProduct.Name;
+            this.Description = updatedProduct.Description;
+            this.Price = updatedProduct.Price;
+            this.Stock = updatedProduct.Stock;
+        }
+        public override string ToString()
+        {
+            string idString = $"ID: {Id}";
+            string nameString = $"Name: {Name}";
+            string descriptionString = $"Description: {Description}";
+            string priceString = $"Price: ${Price}"; // Gebruik C-indeling voor valuta
+            string stockString = $"Stock: {Stock}";
+
+            // Voeg alle geformatteerde strings samen
+            string productInfo = $"\n{idString}\n{nameString}\n{descriptionString}\n{priceString}\n{stockString}\n";
+
+            return productInfo;
         }
     }
 }
